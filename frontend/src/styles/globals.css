@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Custom properties ──────────────────────────────────────── */
+:root {
+  --sidebar-width: 220px;
+  --topbar-height: 56px;
+}
+
+/* ── Base layer overrides ────────────────────────────────────── */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Custom scrollbar — dark themed */
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #1e3a5f;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2563eb;
+  }
+}
+
+/* ── Component layer ─────────────────────────────────────────── */
+@layer components {
+  /* Card */
+  .card {
+    @apply bg-[#0d1f38] border border-[#1e3a5f] rounded-lg;
+  }
+
+  /* Input */
+  .input {
+    @apply w-full bg-[#06111f] border border-[#1e3a5f] rounded-md px-3 py-2
+           text-sm text-slate-200 placeholder-slate-500
+           focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500
+           transition-colors duration-150;
+  }
+
+  /* Button variants */
+  .btn {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm
+           font-medium transition-all duration-150 disabled:opacity-50
+           disabled:cursor-not-allowed select-none;
+  }
+
+  .btn-primary {
+    @apply btn bg-blue-600 text-white hover:bg-blue-500 active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply btn border border-[#1e3a5f] text-slate-400
+           hover:bg-[#112240] hover:text-slate-200 active:scale-[0.98];
+  }
+
+  .btn-danger {
+    @apply btn bg-red-900/40 text-red-400 border border-red-800
+           hover:bg-red-800/50 active:scale-[0.98];
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-semibold font-mono;
+  }
+
+  .badge-green  { @apply badge bg-green-950 text-green-400 border border-green-800; }
+  .badge-red    { @apply badge bg-red-950 text-red-400 border border-red-900; }
+  .badge-amber  { @apply badge bg-amber-950 text-amber-400 border border-amber-900; }
+  .badge-blue   { @apply badge bg-blue-950 text-blue-400 border border-blue-900; }
+  .badge-gray   { @apply badge bg-slate-900 text-slate-400 border border-slate-700; }
+  .badge-purple { @apply badge bg-purple-950 text-purple-400 border border-purple-900; }
+
+  /* Skeleton loader */
+  .skeleton {
+    @apply bg-[#1e3a5f] animate-pulse rounded;
+  }
+}
