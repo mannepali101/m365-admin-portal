@@ -1,0 +1,766 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
+  .adm-root{font-family:'Syne',system-ui,sans-serif;display:flex;height:700px;overflow:hidden;background:#060e1a;color:#e2e8f0;font-size:14px}
+  .adm-sidebar{width:220px;min-width:220px;background:#0a1628;border-right:1px solid #1e3a5f;display:flex;flex-direction:column;overflow:hidden}
+  .adm-logo{padding:18px 16px 14px;border-bottom:1px solid #1e3a5f;display:flex;align-items:center;gap:10px}
+  .adm-logo-icon{width:32px;height:32px;background:linear-gradient(135deg,#1a6cf5,#0ea5e9);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .adm-logo-text{font-size:13px;font-weight:600;color:#f1f5f9;line-height:1.2}
+  .adm-logo-sub{font-size:10px;color:#64748b;letter-spacing:.05em}
+  .adm-nav{flex:1;overflow-y:auto;padding:10px 8px;scrollbar-width:none}
+  .adm-nav::-webkit-scrollbar{display:none}
+  .adm-nav-section{font-size:10px;font-weight:600;color:#475569;letter-spacing:.08em;padding:8px 8px 4px;margin-top:4px}
+  .adm-nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:6px;cursor:pointer;color:#94a3b8;transition:all .15s;margin:1px 0;font-size:13px}
+  .adm-nav-item:hover{background:#112240;color:#e2e8f0}
+  .adm-nav-item.active{background:#1a6cf520;color:#60a5fa;border-left:2px solid #1a6cf5;padding-left:8px}
+  .adm-nav-item i{font-size:16px;width:18px;text-align:center}
+  .adm-nav-badge{margin-left:auto;background:#dc2626;color:#fff;font-size:10px;padding:1px 5px;border-radius:10px;font-family:'IBM Plex Mono',monospace}
+  .adm-sidebar-footer{padding:12px 12px;border-top:1px solid #1e3a5f}
+  .adm-user-pill{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;background:#112240}
+  .adm-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#1a6cf5,#0ea5e9);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+  .adm-user-info{min-width:0}
+  .adm-user-name{font-size:12px;font-weight:600;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .adm-user-role{font-size:10px;color:#1a6cf5}
+  .adm-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+  .adm-topbar{height:54px;min-height:54px;background:#0a1628;border-bottom:1px solid #1e3a5f;display:flex;align-items:center;padding:0 20px;gap:12px}
+  .adm-search{flex:1;max-width:380px;position:relative}
+  .adm-search input{width:100%;background:#06111f;border:1px solid #1e3a5f;border-radius:6px;padding:7px 12px 7px 34px;color:#e2e8f0;font-size:13px;outline:none;font-family:inherit}
+  .adm-search input::placeholder{color:#475569}
+  .adm-search i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#475569;font-size:15px}
+  .adm-topbar-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+  .adm-icon-btn{width:34px;height:34px;border-radius:6px;border:1px solid #1e3a5f;background:transparent;display:flex;align-items:center;justify-content:center;color:#64748b;cursor:pointer;position:relative}
+  .adm-icon-btn:hover{background:#112240;color:#94a3b8}
+  .adm-notif-dot{position:absolute;top:5px;right:5px;width:7px;height:7px;background:#f59e0b;border-radius:50%;border:1px solid #0a1628}
+  .adm-content{flex:1;overflow-y:auto;padding:20px;scrollbar-width:thin;scrollbar-color:#1e3a5f transparent}
+  .adm-content::-webkit-scrollbar{width:4px}
+  .adm-content::-webkit-scrollbar-thumb{background:#1e3a5f;border-radius:4px}
+  .adm-page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+  .adm-page-title{font-size:20px;font-weight:700;color:#f1f5f9}
+  .adm-page-sub{font-size:12px;color:#475569;margin-top:2px}
+  .adm-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:inherit}
+  .adm-btn-primary{background:#1a6cf5;color:#fff}
+  .adm-btn-primary:hover{background:#1d5fd8}
+  .adm-btn-ghost{background:transparent;color:#64748b;border:1px solid #1e3a5f}
+  .adm-btn-ghost:hover{background:#112240;color:#94a3b8}
+  .adm-btn-danger{background:#7f1d1d;color:#fca5a5;border:1px solid #991b1b}
+  .adm-btn-sm{padding:5px 10px;font-size:12px}
+  .adm-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .adm-stat{background:#0d1f38;border:1px solid #1e3a5f;border-radius:8px;padding:14px 16px}
+  .adm-stat-label{font-size:11px;color:#64748b;letter-spacing:.04em;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .adm-stat-val{font-size:26px;font-weight:700;color:#f1f5f9;font-family:'IBM Plex Mono',monospace;line-height:1}
+  .adm-stat-delta{font-size:11px;margin-top:4px;display:flex;align-items:center;gap:4px}
+  .adm-stat-delta.up{color:#22c55e}
+  .adm-stat-delta.down{color:#ef4444}
+  .adm-stat-delta.warn{color:#f59e0b}
+  .adm-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+  .adm-card{background:#0d1f38;border:1px solid #1e3a5f;border-radius:8px;overflow:hidden}
+  .adm-card-hdr{padding:12px 16px;border-bottom:1px solid #1e3a5f;display:flex;align-items:center;justify-content:space-between}
+  .adm-card-title{font-size:13px;font-weight:600;color:#cbd5e1}
+  .adm-card-body{padding:14px 16px}
+  .adm-table{width:100%;border-collapse:collapse;font-size:12.5px}
+  .adm-table th{text-align:left;padding:8px 10px;color:#475569;font-weight:600;font-size:11px;letter-spacing:.05em;border-bottom:1px solid #1e3a5f}
+  .adm-table td{padding:9px 10px;border-bottom:1px solid #0a1e35;color:#94a3b8;vertical-align:middle}
+  .adm-table tr:last-child td{border-bottom:none}
+  .adm-table tr:hover td{background:#112240}
+  .adm-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;font-family:'IBM Plex Mono',monospace}
+  .adm-badge.green{background:#052e16;color:#4ade80;border:1px solid #166534}
+  .adm-badge.red{background:#450a0a;color:#f87171;border:1px solid #7f1d1d}
+  .adm-badge.blue{background:#0c1a4e;color:#60a5fa;border:1px solid #1e3a5f}
+  .adm-badge.amber{background:#2d1800;color:#fbbf24;border:1px solid #92400e}
+  .adm-badge.gray{background:#0f172a;color:#64748b;border:1px solid #334155}
+  .adm-badge.purple{background:#2e1065;color:#c084fc;border:1px solid #4c1d95}
+  .adm-dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex-shrink:0}
+  .adm-dot.green{background:#22c55e}
+  .adm-dot.red{background:#ef4444}
+  .adm-dot.amber{background:#f59e0b}
+  .adm-progress-bar{height:4px;background:#1e3a5f;border-radius:4px;overflow:hidden;margin:3px 0}
+  .adm-progress-fill{height:100%;border-radius:4px;background:#1a6cf5}
+  .adm-service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .adm-service-card{background:#060e1a;border:1px solid #1e3a5f;border-radius:8px;padding:12px;cursor:pointer;transition:border-color .15s}
+  .adm-service-card:hover{border-color:#1a6cf5}
+  .adm-service-card.connected{border-color:#166534}
+  .adm-service-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:8px}
+  .adm-service-name{font-size:12px;font-weight:600;color:#cbd5e1;margin-bottom:2px}
+  .adm-service-status{font-size:11px}
+  .adm-action-bar{display:flex;gap:8px;margin-bottom:14px;align-items:center}
+  .adm-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;border:1px solid #1e3a5f;font-size:12px;color:#64748b;cursor:pointer}
+  .adm-chip.active{border-color:#1a6cf5;color:#60a5fa;background:#1a6cf510}
+  .adm-login{display:flex;align-items:center;justify-content:center;flex:1;background:#060e1a;flex-direction:column;gap:0}
+  .adm-login-card{background:#0a1628;border:1px solid #1e3a5f;border-radius:12px;padding:40px 44px;width:100%;max-width:380px;text-align:center}
+  .adm-login-logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,#1a6cf5,#0ea5e9);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 20px}
+  .adm-login-title{font-size:22px;font-weight:700;color:#f1f5f9;margin-bottom:6px}
+  .adm-login-sub{font-size:13px;color:#64748b;margin-bottom:28px;line-height:1.5}
+  .adm-ms-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:11px;border-radius:7px;border:1px solid #1e3a5f;background:#0d1f38;color:#e2e8f0;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;font-family:inherit;margin-bottom:12px}
+  .adm-ms-btn:hover{background:#112240;border-color:#1a6cf5}
+  .adm-ms-btn svg{flex-shrink:0}
+  .adm-divider{height:1px;background:#1e3a5f;margin:14px 0}
+  .adm-security-note{font-size:11px;color:#475569;display:flex;align-items:center;gap:5px;justify-content:center}
+  .adm-log-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #0a1e35}
+  .adm-log-item:last-child{border-bottom:none}
+  .adm-log-time{font-size:11px;color:#475569;font-family:'IBM Plex Mono',monospace;min-width:80px;padding-top:1px}
+  .adm-log-text{font-size:12px;color:#94a3b8;line-height:1.4;flex:1}
+  .adm-log-actor{color:#60a5fa}
+  .adm-meter{height:120px;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative}
+  .adm-sparkline{display:flex;align-items:flex-end;gap:2px;height:36px}
+  .adm-spark-bar{background:#1a6cf5;border-radius:2px 2px 0 0;opacity:.7;flex:1;transition:opacity .15s}
+  .adm-spark-bar:hover{opacity:1}
+  .adm-notif-panel{position:absolute;right:0;top:40px;width:280px;background:#0a1628;border:1px solid #1e3a5f;border-radius:8px;z-index:10;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+  .adm-notif-item{padding:10px 14px;border-bottom:1px solid #1e3a5f;cursor:pointer}
+  .adm-notif-item:hover{background:#112240}
+  .adm-notif-item:last-child{border-bottom:none}
+  .adm-notif-title{font-size:12px;font-weight:600;color:#cbd5e1;margin-bottom:2px}
+  .adm-notif-body{font-size:11px;color:#64748b}
+  .adm-empty{text-align:center;padding:32px;color:#475569;font-size:13px}
+  .adm-chart-container{display:flex;align-items:flex-end;gap:3px;height:80px;padding:0 4px}
+  .adm-chart-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+  .adm-chart-bar{width:100%;border-radius:3px 3px 0 0;background:#1a6cf5;opacity:.75;transition:opacity .15s}
+  .adm-chart-bar:hover{opacity:1}
+  .adm-chart-label{font-size:10px;color:#475569;font-family:'IBM Plex Mono',monospace}
+  .adm-scroll-inner{overflow-y:auto;max-height:220px;scrollbar-width:none}
+  .adm-scroll-inner::-webkit-scrollbar{display:none}
+  .adm-input{background:#06111f;border:1px solid #1e3a5f;border-radius:6px;padding:7px 12px;color:#e2e8f0;font-size:13px;outline:none;font-family:inherit;width:100%}
+  .adm-input:focus{border-color:#1a6cf5}
+  .adm-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+  .adm-form-label{font-size:11px;color:#64748b;margin-bottom:4px;letter-spacing:.04em}
+  .adm-modal-overlay{position:absolute;inset:0;background:rgba(6,14,26,.85);display:flex;align-items:center;justify-content:center;z-index:20}
+  .adm-modal{background:#0a1628;border:1px solid #1e3a5f;border-radius:10px;padding:24px;width:400px;max-width:90%}
+  .adm-modal-title{font-size:16px;font-weight:700;color:#f1f5f9;margin-bottom:4px}
+  .adm-modal-sub{font-size:12px;color:#64748b;margin-bottom:18px}
+  .adm-select{background:#06111f;border:1px solid #1e3a5f;border-radius:6px;padding:7px 12px;color:#e2e8f0;font-size:13px;outline:none;font-family:inherit;width:100%}
+  .adm-select option{background:#0a1628}
+  .adm-tag{display:inline-flex;align-items:center;gap:4px;background:#0c1a4e;color:#60a5fa;border:1px solid #1e3a5f;border-radius:4px;font-size:11px;padding:2px 7px}
+  .adm-tag i{font-size:12px;cursor:pointer}
+  .adm-tag i:hover{color:#f87171}
+  .adm-fullcard{background:#0d1f38;border:1px solid #1e3a5f;border-radius:8px;overflow:hidden;margin-bottom:14px}
+  .adm-workflow-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #0a1e35}
+  .adm-workflow-item:last-child{border-bottom:none}
+  .adm-workflow-icon{width:36px;height:36px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+  .adm-workflow-info{flex:1;min-width:0}
+  .adm-workflow-name{font-size:13px;font-weight:600;color:#cbd5e1;margin-bottom:1px}
+  .adm-workflow-desc{font-size:11px;color:#475569}
+  .adm-toggle{position:relative;display:inline-block;width:36px;height:20px}
+  .adm-toggle input{opacity:0;width:0;height:0;position:absolute}
+  .adm-toggle-slider{position:absolute;inset:0;background:#1e3a5f;border-radius:20px;cursor:pointer;transition:.2s}
+  .adm-toggle-slider:before{content:'';position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:#64748b;border-radius:50%;transition:.2s}
+  .adm-toggle input:checked+.adm-toggle-slider{background:#1a6cf530;border:1px solid #1a6cf5}
+  .adm-toggle input:checked+.adm-toggle-slider:before{transform:translateX(16px);background:#1a6cf5}
+</style>
+
+<div class="adm-root" id="adm-root">
+  <div id="adm-login-screen" style="display:flex;flex:1;align-items:center;justify-content:center;background:#060e1a">
+    <div class="adm-login-card">
+      <div class="adm-login-logo">⚡</div>
+      <div class="adm-login-title">M365 Admin Portal</div>
+      <div class="adm-login-sub">Centralized IT administration for your Microsoft 365 environment. Sign in with your organizational account.</div>
+      <button class="adm-ms-btn" id="ms-login-btn">
+        <svg width="18" height="18" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
+        Sign in with Microsoft Entra ID
+      </button>
+      <div class="adm-divider"></div>
+      <div class="adm-security-note"><i class="ti ti-shield-check"></i> Secured by OAuth 2.0 · MFA Enforced · Zero-trust</div>
+    </div>
+  </div>
+
+  <div id="adm-app" style="display:none;flex:1;overflow:hidden">
+    <div class="adm-sidebar">
+      <div class="adm-logo">
+        <div class="adm-logo-icon">⚡</div>
+        <div>
+          <div class="adm-logo-text">M365 Admin</div>
+          <div class="adm-logo-sub">contoso.onmicrosoft.com</div>
+        </div>
+      </div>
+      <div class="adm-nav" id="adm-nav">
+        <div class="adm-nav-section">OVERVIEW</div>
+        <div class="adm-nav-item active" data-page="dashboard"><i class="ti ti-layout-dashboard"></i>Dashboard</div>
+        <div class="adm-nav-item" data-page="services"><i class="ti ti-plug-connected"></i>Connected Services</div>
+        <div class="adm-nav-section">IDENTITY</div>
+        <div class="adm-nav-item" data-page="users"><i class="ti ti-users"></i>Users</div>
+        <div class="adm-nav-item" data-page="groups"><i class="ti ti-shield-half"></i>Entra ID Groups</div>
+        <div class="adm-nav-item" data-page="licenses"><i class="ti ti-license"></i>Licenses</div>
+        <div class="adm-nav-section">ENDPOINT</div>
+        <div class="adm-nav-item" data-page="devices"><i class="ti ti-device-laptop"></i>Intune Devices</div>
+        <div class="adm-nav-item" data-page="compliance"><i class="ti ti-clipboard-check"></i>Compliance</div>
+        <div class="adm-nav-section">COLLABORATION</div>
+        <div class="adm-nav-item" data-page="sharepoint"><i class="ti ti-folders"></i>SharePoint Access</div>
+        <div class="adm-nav-item" data-page="teams"><i class="ti ti-brand-teams"></i>Teams Usage</div>
+        <div class="adm-nav-section">OPERATIONS</div>
+        <div class="adm-nav-item" data-page="reports"><i class="ti ti-chart-bar"></i>Reports</div>
+        <div class="adm-nav-item" data-page="audit"><i class="ti ti-history"></i>Audit Logs<span class="adm-nav-badge">12</span></div>
+        <div class="adm-nav-item" data-page="automation"><i class="ti ti-robot"></i>Automation</div>
+        <div class="adm-nav-section">SETTINGS</div>
+        <div class="adm-nav-item" data-page="settings"><i class="ti ti-settings"></i>Configuration</div>
+      </div>
+      <div class="adm-sidebar-footer">
+        <div class="adm-user-pill">
+          <div class="adm-avatar">AG</div>
+          <div class="adm-user-info">
+            <div class="adm-user-name">Alex Garcia</div>
+            <div class="adm-user-role">Global Admin</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="adm-main">
+      <div class="adm-topbar">
+        <div class="adm-search">
+          <i class="ti ti-search"></i>
+          <input type="text" placeholder="Search users, devices, groups..." id="adm-search-input">
+        </div>
+        <div class="adm-topbar-right">
+          <div class="adm-icon-btn" id="notif-btn"><i class="ti ti-bell"></i><span class="adm-notif-dot"></span></div>
+          <div class="adm-icon-btn"><i class="ti ti-refresh"></i></div>
+          <div class="adm-icon-btn"><i class="ti ti-help-circle"></i></div>
+          <div style="position:relative" id="notif-container"></div>
+        </div>
+      </div>
+
+      <div class="adm-content" id="adm-content">
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+const users=[
+  {name:'Alice Johnson',upn:'alice@contoso.com',dept:'Engineering',lic:'E3',status:'Active',mfa:true,lastSign:'2m ago',risk:'None'},
+  {name:'Bob Martinez',upn:'bob@contoso.com',dept:'Sales',lic:'E3',status:'Active',mfa:true,lastSign:'1h ago',risk:'None'},
+  {name:'Carol Kim',upn:'carol@contoso.com',dept:'HR',lic:'E1',status:'Active',mfa:false,lastSign:'2h ago',risk:'Medium'},
+  {name:'David Chen',upn:'david@contoso.com',dept:'Finance',lic:'E5',status:'Active',mfa:true,lastSign:'3h ago',risk:'None'},
+  {name:'Eve Williams',upn:'eve@contoso.com',dept:'Legal',lic:'E3',status:'Disabled',mfa:true,lastSign:'5d ago',risk:'None'},
+  {name:'Frank Brown',upn:'frank@contoso.com',dept:'IT',lic:'E5',status:'Active',mfa:true,lastSign:'10m ago',risk:'High'},
+  {name:'Grace Lee',upn:'grace@contoso.com',dept:'Marketing',lic:'E1',status:'Active',mfa:false,lastSign:'4h ago',risk:'Low'},
+];
+const devices=[
+  {name:'LAPTOP-AG4291',type:'Laptop',os:'Windows 11 23H2',owner:'Alex Garcia',status:'Compliant',enrolled:'Jan 12 2024',lastSync:'5m ago'},
+  {name:'DESKTOP-MKT01',type:'Desktop',os:'Windows 11 22H2',owner:'Grace Lee',status:'Compliant',enrolled:'Mar 3 2024',lastSync:'2h ago'},
+  {name:'MACBOOK-CAROL',type:'MacBook',os:'macOS 14.3',owner:'Carol Kim',status:'Non-compliant',enrolled:'Feb 18 2024',lastSync:'1d ago'},
+  {name:'IPHONE-BOB',type:'iPhone',os:'iOS 17.3',owner:'Bob Martinez',status:'Compliant',enrolled:'Apr 1 2024',lastSync:'30m ago'},
+  {name:'TABLET-SALES2',type:'iPad',os:'iPadOS 17.2',owner:'Sales Pool',status:'Pending',enrolled:'Apr 10 2024',lastSync:'2d ago'},
+];
+const groups=[
+  {name:'IT-Admins',type:'Security',members:8,owner:'Alex Garcia',scope:'Global',created:'2023-01-10'},
+  {name:'Engineering-All',type:'Microsoft 365',members:42,owner:'David Chen',scope:'Org',created:'2023-02-14'},
+  {name:'Sales-EMEA',type:'Security',members:18,owner:'Bob Martinez',scope:'Org',created:'2023-05-20'},
+  {name:'HR-Restricted',type:'Security',members:5,owner:'Carol Kim',scope:'Restricted',created:'2023-03-08'},
+  {name:'License-E5',type:'Dynamic',members:12,owner:'System',scope:'Global',created:'2023-06-01'},
+];
+const auditLogs=[
+  {time:'09:41',actor:'alex@contoso.com',action:'Password reset for carol@contoso.com',sev:'Info'},
+  {time:'09:38',actor:'system',action:'Conditional Access Policy triggered — high risk login blocked',sev:'Warn'},
+  {time:'09:22',actor:'frank@contoso.com',action:'Device enrolled: LAPTOP-FRK001',sev:'Info'},
+  {time:'08:55',actor:'alex@contoso.com',action:'License assigned E3 → E5 for david@contoso.com',sev:'Info'},
+  {time:'08:30',actor:'system',action:'MFA challenge failed 3× for external IP 203.0.113.42',sev:'Error'},
+  {time:'07:44',actor:'carol@contoso.com',action:'SharePoint site created: HR-Documents-2024',sev:'Info'},
+  {time:'07:12',actor:'system',action:'Compliance policy updated: BitLocker required',sev:'Info'},
+  {time:'06:30',actor:'alex@contoso.com',action:'New group created: License-E5',sev:'Info'},
+  {time:'Yesterday',actor:'bob@contoso.com',action:'Teams channel archived: Old-Project-Alpha',sev:'Info'},
+  {time:'Yesterday',actor:'system',action:'Stale account flagged: eve@contoso.com (inactive 90d)',sev:'Warn'},
+];
+const workflows=[
+  {name:'New Employee Onboarding',desc:'Provision account, assign licenses, add to groups, send welcome email',icon:'ti-user-plus',color:'#0c1a4e',runs:24,status:true},
+  {name:'Offboarding & Revocation',desc:'Disable account, revoke sessions, backup OneDrive, notify IT',icon:'ti-user-minus',color:'#450a0a',runs:12,status:true},
+  {name:'License Reallocation',desc:'Scan inactive E5 licenses >60 days, downgrade and notify manager',icon:'ti-license',color:'#2d1800',runs:8,status:false},
+  {name:'MFA Enforcement',desc:'Identify non-MFA accounts, send nudge email, escalate after 72h',icon:'ti-shield-lock',color:'#0c1a4e',runs:156,status:true},
+  {name:'Device Compliance Remediation',desc:'Auto-remediate minor issues, quarantine non-compliant devices',icon:'ti-device-laptop',color:'#052e16',runs:47,status:true},
+];
+const services=[
+  {name:'Microsoft Graph API',icon:'🔗',connected:true,desc:'Core API gateway'},
+  {name:'Entra ID',icon:'🔐',connected:true,desc:'Identity provider'},
+  {name:'Intune',icon:'📱',connected:true,desc:'Device management'},
+  {name:'Exchange Online',icon:'📧',connected:true,desc:'Email & calendar'},
+  {name:'SharePoint',icon:'📁',connected:true,desc:'Document management'},
+  {name:'Microsoft Teams',icon:'💬',connected:true,desc:'Collaboration'},
+  {name:'Defender for Endpoint',icon:'🛡️',connected:false,desc:'Threat protection'},
+  {name:'Sentinel',icon:'👁️',connected:false,desc:'SIEM & SOAR'},
+  {name:'Power Automate',icon:'⚡',connected:false,desc:'Workflow automation'},
+];
+
+let currentPage='dashboard';
+let showNotif=false;
+let showModal=false;
+let modalType='';
+let selectedUser=null;
+let workflowStates=workflows.map(w=>w.status);
+let userFilter='all';
+
+function sevColor(s){return s==='Error'?'red':s==='Warn'?'amber':'gray'}
+
+function renderDashboard(){
+  const sparkData=[42,55,38,67,73,58,81,62,90,78,84,92];
+  const sparkMax=Math.max(...sparkData);
+  const spBars=sparkData.map(v=>`<div class="adm-spark-bar" style="height:${Math.round(v/sparkMax*100)}%"></div>`).join('');
+  return`
+<div class="adm-page-header">
+  <div><div class="adm-page-title">Command Overview</div><div class="adm-page-sub">Contoso Corp · Microsoft 365 E3/E5 · Tenant ID: 9f4b2a1c-...</div></div>
+  <div style="display:flex;gap:8px">
+    <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="navigate('audit')"><i class="ti ti-history"></i>Audit Logs</button>
+    <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="navigate('users')"><i class="ti ti-plus"></i>New User</button>
+  </div>
+</div>
+<div class="adm-stat-grid">
+  <div class="adm-stat">
+    <div class="adm-stat-label"><i class="ti ti-users" style="font-size:13px"></i>TOTAL USERS</div>
+    <div class="adm-stat-val">2,847</div>
+    <div class="adm-stat-delta up"><i class="ti ti-arrow-up" style="font-size:10px"></i>+12 this week</div>
+  </div>
+  <div class="adm-stat">
+    <div class="adm-stat-label"><i class="ti ti-device-laptop" style="font-size:13px"></i>MANAGED DEVICES</div>
+    <div class="adm-stat-val">1,432</div>
+    <div class="adm-stat-delta warn"><i class="ti ti-alert-triangle" style="font-size:10px"></i>23 non-compliant</div>
+  </div>
+  <div class="adm-stat">
+    <div class="adm-stat-label"><i class="ti ti-license" style="font-size:13px"></i>ACTIVE LICENSES</div>
+    <div class="adm-stat-val">3,150</div>
+    <div class="adm-stat-delta up"><i class="ti ti-circle-check" style="font-size:10px"></i>303 available</div>
+  </div>
+  <div class="adm-stat">
+    <div class="adm-stat-label"><i class="ti ti-shield-check" style="font-size:13px"></i>MFA COVERAGE</div>
+    <div class="adm-stat-val">94%</div>
+    <div class="adm-stat-delta down"><i class="ti ti-arrow-down" style="font-size:10px"></i>168 without MFA</div>
+  </div>
+</div>
+<div class="adm-grid-2">
+  <div class="adm-card">
+    <div class="adm-card-hdr">
+      <span class="adm-card-title"><i class="ti ti-activity" style="font-size:14px;margin-right:6px"></i>Sign-in Activity (12h)</span>
+      <span style="font-size:11px;color:#475569">Today</span>
+    </div>
+    <div class="adm-card-body">
+      <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+        <div><div style="font-size:22px;font-weight:700;color:#f1f5f9;font-family:'IBM Plex Mono',monospace">4,291</div><div style="font-size:11px;color:#64748b">successful logins</div></div>
+        <div style="text-align:right"><div style="font-size:22px;font-weight:700;color:#ef4444;font-family:'IBM Plex Mono',monospace">37</div><div style="font-size:11px;color:#64748b">failed / blocked</div></div>
+      </div>
+      <div class="adm-chart-container">
+        ${[78,52,34,22,18,25,42,68,90,84,76,82].map((v,i)=>{const lbl=['6am','','','','10','','','','2pm','','','6pm'][i];return`<div class="adm-chart-bar-wrap"><div class="adm-chart-bar" style="height:${Math.round(v*0.8)}px"></div><div class="adm-chart-label">${lbl}</div></div>`}).join('')}
+      </div>
+    </div>
+  </div>
+  <div class="adm-card">
+    <div class="adm-card-hdr">
+      <span class="adm-card-title"><i class="ti ti-alert-triangle" style="font-size:14px;margin-right:6px"></i>Security Alerts</span>
+      <span class="adm-badge amber">3 Active</span>
+    </div>
+    <div class="adm-card-body">
+      ${[
+        {t:'High-risk sign-in detected',d:'frank@contoso.com · Unknown location',c:'red'},
+        {t:'MFA not enrolled — 168 accounts',d:'Escalation required after 72h',c:'amber'},
+        {t:'Non-compliant device access',d:'MACBOOK-CAROL attempting email access',c:'amber'},
+      ].map(a=>`<div style="display:flex;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid #0a1e35">
+        <div class="adm-dot ${a.c}" style="margin-top:5px"></div>
+        <div><div style="font-size:12px;font-weight:600;color:#cbd5e1">${a.t}</div><div style="font-size:11px;color:#475569">${a.d}</div></div>
+      </div>`).join('')}
+      <button class="adm-btn adm-btn-ghost adm-btn-sm" style="margin-top:10px;width:100%" onclick="navigate('audit')">View all in Audit Logs →</button>
+    </div>
+  </div>
+</div>
+<div class="adm-grid-2">
+  <div class="adm-card">
+    <div class="adm-card-hdr">
+      <span class="adm-card-title"><i class="ti ti-device-laptop" style="font-size:14px;margin-right:6px"></i>Device Compliance</span>
+    </div>
+    <div class="adm-card-body">
+      ${[{label:'Compliant',val:89,color:'#22c55e'},{label:'Non-compliant',val:7,color:'#ef4444'},{label:'Pending',val:4,color:'#f59e0b'}].map(r=>`
+      <div style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;color:#94a3b8">${r.label}</span><span style="font-size:12px;font-family:'IBM Plex Mono',monospace;color:#f1f5f9">${r.val}%</span></div>
+        <div class="adm-progress-bar"><div class="adm-progress-fill" style="width:${r.val}%;background:${r.color}"></div></div>
+      </div>`).join('')}
+      <button class="adm-btn adm-btn-ghost adm-btn-sm" style="margin-top:6px" onclick="navigate('devices')">Manage Devices →</button>
+    </div>
+  </div>
+  <div class="adm-card">
+    <div class="adm-card-hdr">
+      <span class="adm-card-title"><i class="ti ti-history" style="font-size:14px;margin-right:6px"></i>Recent Activity</span>
+    </div>
+    <div class="adm-card-body" style="padding:8px 16px">
+      ${auditLogs.slice(0,5).map(l=>`<div class="adm-log-item">
+        <div class="adm-log-time">${l.time}</div>
+        <div class="adm-log-text"><span class="adm-log-actor">${l.actor}</span> — ${l.action}</div>
+        <span class="adm-badge ${sevColor(l.sev)}">${l.sev}</span>
+      </div>`).join('')}
+    </div>
+  </div>
+</div>`;
+}
+
+function renderUsers(){
+  const filtered=userFilter==='all'?users:users.filter(u=>u.status.toLowerCase()===userFilter||(!u.mfa&&userFilter==='nomfa')||(u.risk!=='None'&&userFilter==='risk'));
+  return`
+<div class="adm-page-header">
+  <div><div class="adm-page-title">User Management</div><div class="adm-page-sub">Microsoft Entra ID · ${users.length} accounts</div></div>
+  <div style="display:flex;gap:8px">
+    <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="showExportModal()"><i class="ti ti-download"></i>Export</button>
+    <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="openNewUserModal()"><i class="ti ti-plus"></i>Add User</button>
+  </div>
+</div>
+<div class="adm-action-bar">
+  <input class="adm-input" style="max-width:220px;padding:5px 10px;font-size:12px" placeholder="Search users..." id="user-search">
+  <div class="adm-chip ${userFilter==='all'?'active':''}" onclick="setUF('all')">All Users</div>
+  <div class="adm-chip ${userFilter==='active'?'active':''}" onclick="setUF('active')">Active</div>
+  <div class="adm-chip ${userFilter==='nomfa'?'active':''}" onclick="setUF('nomfa')">No MFA</div>
+  <div class="adm-chip ${userFilter==='risk'?'active':''}" onclick="setUF('risk')">At Risk</div>
+</div>
+<div class="adm-fullcard">
+  <table class="adm-table">
+    <thead><tr><th>Name</th><th>Department</th><th>License</th><th>MFA</th><th>Status</th><th>Risk</th><th>Last Sign-in</th><th>Actions</th></tr></thead>
+    <tbody>
+      ${filtered.map((u,i)=>`<tr>
+        <td><div style="display:flex;align-items:center;gap:8px"><div class="adm-avatar" style="width:24px;height:24px;font-size:10px">${u.name.split(' ').map(n=>n[0]).join('')}</div><div><div style="color:#e2e8f0;font-size:12px;font-weight:500">${u.name}</div><div style="color:#475569;font-size:11px">${u.upn}</div></div></div></td>
+        <td>${u.dept}</td>
+        <td><span class="adm-badge ${u.lic==='E5'?'purple':u.lic==='E3'?'blue':'gray'}">${u.lic}</span></td>
+        <td><span class="adm-badge ${u.mfa?'green':'red'}">${u.mfa?'✓ On':'✗ Off'}</span></td>
+        <td><span class="adm-badge ${u.status==='Active'?'green':'red'}">${u.status}</span></td>
+        <td><span class="adm-badge ${u.risk==='None'?'gray':u.risk==='High'?'red':'amber'}">${u.risk}</span></td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px">${u.lastSign}</td>
+        <td><div style="display:flex;gap:6px">
+          <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="openResetModal(${i})"><i class="ti ti-key"></i></button>
+          <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="openLicModal(${i})"><i class="ti ti-license"></i></button>
+          <button class="adm-btn adm-btn-ghost adm-btn-sm" style="color:#ef4444" onclick="alert('Disable/Enable user: '+users[${i}].name)"><i class="ti ti-user-off"></i></button>
+        </div></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>
+</div>`;
+}
+
+function renderDevices(){
+  return`
+<div class="adm-page-header">
+  <div><div class="adm-page-title">Intune Device Management</div><div class="adm-page-sub">Microsoft Endpoint Manager · ${devices.length} enrolled devices</div></div>
+  <div style="display:flex;gap:8px">
+    <button class="adm-btn adm-btn-ghost adm-btn-sm"><i class="ti ti-refresh"></i>Sync All</button>
+    <button class="adm-btn adm-btn-primary adm-btn-sm"><i class="ti ti-download"></i>Export Report</button>
+  </div>
+</div>
+<div class="adm-stat-grid" style="grid-template-columns:repeat(3,1fr)">
+  <div class="adm-stat"><div class="adm-stat-label">COMPLIANT</div><div class="adm-stat-val" style="color:#22c55e">4</div></div>
+  <div class="adm-stat"><div class="adm-stat-label">NON-COMPLIANT</div><div class="adm-stat-val" style="color:#ef4444">1</div></div>
+  <div class="adm-stat"><div class="adm-stat-label">PENDING</div><div class="adm-stat-val" style="color:#f59e0b">1</div></div>
+</div>
+<div class="adm-fullcard">
+  <table class="adm-table">
+    <thead><tr><th>Device</th><th>Type</th><th>OS</th><th>Owner</th><th>Status</th><th>Enrolled</th><th>Last Sync</th><th>Actions</th></tr></thead>
+    <tbody>
+      ${devices.map(d=>`<tr>
+        <td style="color:#e2e8f0;font-weight:500;font-family:'IBM Plex Mono',monospace;font-size:12px">${d.name}</td>
+        <td><span class="adm-badge blue">${d.type}</span></td>
+        <td style="font-size:11px;color:#94a3b8">${d.os}</td>
+        <td>${d.owner}</td>
+        <td><span class="adm-badge ${d.status==='Compliant'?'green':d.status==='Non-compliant'?'red':'amber'}">${d.status}</span></td>
+        <td style="font-size:11px;color:#64748b">${d.enrolled}</td>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px">${d.lastSync}</td>
+        <td><div style="display:flex;gap:6px">
+          <button class="adm-btn adm-btn-ghost adm-btn-sm" title="Remote wipe" onclick="alert('Initiating remote wipe for ${d.name}...')"><i class="ti ti-trash"></i></button>
+          <button class="adm-btn adm-btn-ghost adm-btn-sm" title="Sync device" onclick="alert('Syncing ${d.name}...')"><i class="ti ti-refresh"></i></button>
+          <button class="adm-btn adm-btn-ghost adm-btn-sm" title="View details"><i class="ti ti-info-circle"></i></button>
+        </div></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>
+</div>`;
+}
+
+function renderGroups(){
+  return`
+<div class="adm-page-header">
+  <div><div class="adm-page-title">Entra ID Groups</div><div class="adm-page-sub">Security & Microsoft 365 groups</div></div>
+  <button class="adm-btn adm-btn-primary adm-btn-sm"><i class="ti ti-plus"></i>New Group</button>
+</div>
+<div class="adm-fullcard">
+  <table class="adm-table">
+    <thead><tr><th>Group Name</th><th>Type</th><th>Members</th><th>Owner</th><th>Scope</th><th>Created</th><th>Actions</th></tr></thead>
+    <tbody>
+      ${groups.map(g=>`<tr>
+        <td style="color:#e2e8f0;font-weight:500">${g.name}</td>
+        <td><span class="adm-badge ${g.type==='Security'?'blue':g.type==='Dynamic'?'purple':'green'}">${g.type}</span></td>
+        <td style="font-family:'IBM Plex Mono',monospace">${g.members}</td>
+        <td style="font-size:12px;color:#94a3b8">${g.owner}</td>
+        <td><span class="adm-badge gray">${g.scope}</span></td>
+        <td style="font-size:11px;color:#64748b">${g.created}</td>
+        <td><div style="display:flex;gap:6px">
+          <button class="adm-btn adm-btn-ghost adm-btn-sm"><i class="ti ti-users"></i></button>
+          <button class="adm-btn adm-btn-ghost adm-btn-sm"><i class="ti ti-edit"></i></button>
+          <button class="adm-btn adm-btn-ghost adm-btn-sm" style="color:#ef4444"><i class="ti ti-trash"></i></button>
+        </div></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>
+</div>`;
+}
+
+function renderAudit(){
+  return`
+<div class="adm-page-header">
+  <div><div class="adm-page-title">Audit Logs</div><div class="adm-page-sub">Complete activity trail · Unified audit log from Microsoft 365</div></div>
+  <div style="display:flex;gap:8px">
+    <button class="adm-btn adm-btn-ghost adm-btn-sm"><i class="ti ti-filter"></i>Filter</button>
+    <button class="adm-btn adm-btn-ghost adm-btn-sm"><i class="ti ti-download"></i>Export CSV</button>
+  </div>
+</div>
+<div class="adm-action-bar">
+  <div class="adm-chip active">All Events</div>
+  <div class="adm-chip">Errors</div>
+  <div class="adm-chip">Warnings</div>
+  <div class="adm-chip">User Actions</div>
+  <div class="adm-chip">System</div>
+</div>
+<div class="adm-fullcard">
+  <table class="adm-table">
+    <thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Severity</th></tr></thead>
+    <tbody>
+      ${auditLogs.map(l=>`<tr>
+        <td style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:#64748b;white-space:nowrap">${l.time}</td>
+        <td style="color:#60a5fa;font-size:12px">${l.actor}</td>
+        <td style="color:#94a3b8;font-size:12px">${l.action}</td>
+        <td><span class="adm-badge ${sevColor(l.sev)}">${l.sev}</span></td>
+      </tr>`).join('')}
+    </tbody>
+  </table>
+</div>`;
+}
+
+function renderReports(){
+  return`
+<div class="adm-page-header">
+  <div><div class="adm-page-title">Reports & Analytics</div><div class="adm-page-sub">Microsoft 365 usage, security posture, compliance status</div></div>
+  <button class="adm-btn adm-btn-primary adm-btn-sm"><i class="ti ti-file-analytics"></i>Generate Report</button>
+</div>
+<div class="adm-stat-grid">
+  <div class="adm-stat"><div class="adm-stat-label">TEAMS ACTIVE USERS</div><div class="adm-stat-val">1,842</div><div class="adm-stat-delta up">+8% vs last month</div></div>
+  <div class="adm-stat"><div class="adm-stat-label">STORAGE USED</div><div class="adm-stat-val">4.2TB</div><div class="adm-stat-delta warn">78% of quota</div></div>
+  <div class="adm-stat"><div class="adm-stat-label">EMAIL SENT (30D)</div><div class="adm-stat-val">284K</div><div class="adm-stat-delta up">↑ 12% MoM</div></div>
+  <div class="adm-stat"><div class="adm-stat-label">SECURE SCORE</div><div class="adm-stat-val">73/100</div><div class="adm-stat-delta up">+4 pts this week</div></div>
+</div>
+<div class="adm-grid-2">
+  <div class="adm-card">
+    <div class="adm-card-hdr"><span class="adm-card-title">License Usage by SKU</span></div>
+    <div class="adm-card-body">
+      ${[{n:'Microsoft 365 E5',used:312,total:350,c:'#a855f7'},{n:'Microsoft 365 E3',used:1820,total:2000,c:'#3b82f6'},{n:'Microsoft 365 E1',used:650,total:800,c:'#22c55e'},{n:'Teams Essentials',used:65,total:100,c:'#f59e0b'}].map(l=>`
+      <div style="margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+          <span style="font-size:12px;color:#94a3b8">${l.n}</span>
+          <span style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:#f1f5f9">${l.used}/${l.total}</span>
+        </div>
+        <div class="adm-progress-bar"><div class="adm-progress-fill" style="width:${Math.round(l.used/l.total*100)}%;background:${l.c}"></div></div>
+      </div>`).join('')}
+    </div>
+  </div>
+  <div class="adm-card">
+    <div class="adm-card-hdr"><span class="adm-card-title">Top SharePoint Sites by Access</span></div>
+    <div class="adm-card-body">
+      <table class="adm-table" style="font-size:12px">
+        <thead><tr><th>Site</th><th>Visitors (30d)</th><th>Storage</th></tr></thead>
+        <tbody>
+          ${[['HR-Documents-2024',840,'12 GB'],['Engineering-Wiki',620,'48 GB'],['Sales-Playbook',540,'8 GB'],['Finance-Reports',310,'22 GB'],['Legal-Contracts',290,'35 GB']].map(r=>`<tr><td style="color:#94a3b8">${r[0]}</td><td style="font-family:'IBM Plex Mono',monospace;color:#60a5fa">${r[1]}</td><td style="font-family:'IBM Plex Mono',monospace">${r[2]}</td></tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>`;
+}
+
+function renderAutomation(){
+  return`
+<div class="adm-page-header">
+  <div><div class="adm-page-title">Automation Workflows</div><div class="adm-page-sub">IT process automation via Microsoft Graph + Power Automate</div></div>
+  <button class="adm-btn adm-btn-primary adm-btn-sm"><i class="ti ti-plus"></i>New Workflow</button>
+</div>
+<div class="adm-fullcard">
+  ${workflows.map((w,i)=>`<div class="adm-workflow-item">
+    <div class="adm-workflow-icon" style="background:${w.color}"><i class="ti ${w.icon}" style="font-size:17px;color:${i===1?'#f87171':i===2?'#fbbf24':'#60a5fa'}"></i></div>
+    <div class="adm-workflow-info">
+      <div class="adm-workflow-name">${w.name}</div>
+      <div class="adm-workflow-desc">${w.desc}</div>
+    </div>
+    <div style="text-align:right;min-width:80px;margin-right:8px">
+      <div style="font-size:16px;font-weight:700;color:#f1f5f9;font-family:'IBM Plex Mono',monospace">${w.runs}</div>
+      <div style="font-size:10px;color:#475569">runs this month</div>
+    </div>
+    <label class="adm-toggle">
+      <input type="checkbox" ${workflowStates[i]?'checked':''} onchange="toggleWorkflow(${i},this.checked)">
+      <span class="adm-toggle-slider"></span>
+    </label>
+    <button class="adm-btn adm-btn-ghost adm-btn-sm" style="margin-left:8px" onclick="alert('Running: ${w.name}')"><i class="ti ti-player-play"></i>Run</button>
+  </div>`).join('')}
+</div>`;
+}
+
+function renderServices(){
+  return`
+<div class="adm-page-header">
+  <div><div class="adm-page-title">Connected Services</div><div class="adm-page-sub">Microsoft 365 service integrations</div></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+  ${services.map((s,i)=>`<div class="adm-service-card ${s.connected?'connected':''}" onclick="connectService(${i})">
+    <div class="adm-service-icon" style="background:${s.connected?'#052e16':'#0d1f38'}">${s.icon}</div>
+    <div class="adm-service-name">${s.name}</div>
+    <div class="adm-service-status" style="color:${s.connected?'#22c55e':'#475569'}">${s.connected?'● Connected':'○ Not connected'}</div>
+    <div style="font-size:10px;color:#475569;margin-top:2px">${s.desc}</div>
+    ${!s.connected?`<button class="adm-btn adm-btn-ghost adm-btn-sm" style="margin-top:8px;width:100%;font-size:11px">Connect →</button>`:''}
+  </div>`).join('')}
+</div>`;
+}
+
+function renderSettings(){
+  return`
+<div class="adm-page-header">
+  <div><div class="adm-page-title">Portal Configuration</div><div class="adm-page-sub">Environment variables, RBAC, security policies</div></div>
+  <button class="adm-btn adm-btn-primary adm-btn-sm"><i class="ti ti-device-floppy"></i>Save Changes</button>
+</div>
+<div class="adm-fullcard">
+  <div class="adm-card-hdr"><span class="adm-card-title">Microsoft Entra ID Configuration</span></div>
+  <div style="padding:16px">
+    <div class="adm-form-row">
+      <div><div class="adm-form-label">TENANT ID</div><input class="adm-input" value="9f4b2a1c-xxxx-xxxx-xxxx-xxxxxxxxxxxx" readonly></div>
+      <div><div class="adm-form-label">CLIENT ID (App Registration)</div><input class="adm-input" value="b7e3d91a-xxxx-xxxx-xxxx-xxxxxxxxxxxx" readonly></div>
+    </div>
+    <div class="adm-form-row">
+      <div><div class="adm-form-label">AUTHORITY</div><input class="adm-input" value="https://login.microsoftonline.com/{tenant-id}"></div>
+      <div><div class="adm-form-label">REDIRECT URI</div><input class="adm-input" value="https://m365admin.contoso.com/auth/callback"></div>
+    </div>
+  </div>
+</div>
+<div class="adm-fullcard" style="margin-top:14px">
+  <div class="adm-card-hdr"><span class="adm-card-title">Role-Based Access Control</span></div>
+  <div style="padding:16px">
+    <table class="adm-table">
+      <thead><tr><th>Role</th><th>Permissions</th><th>Assigned To</th></tr></thead>
+      <tbody>
+        ${[['Global Admin','Full access · All operations','Alex Garcia, IT Team (3)'],['User Admin','Manage users, passwords, licenses','Sarah Connor, Help Desk (8)'],['Device Manager','Intune read/write, compliance policies','Frank Brown, Desktop Team (4)'],['Reports Reader','Read-only · Reports and audit logs','Management Team (12)']].map(r=>`<tr><td><span class="adm-badge purple">${r[0]}</span></td><td style="font-size:11px;color:#64748b">${r[1]}</td><td style="font-size:12px;color:#94a3b8">${r[2]}</td></tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+</div>`;
+}
+
+function renderPage(page){
+  const pages={dashboard:renderDashboard,users:renderUsers,devices:renderDevices,groups:renderGroups,audit:renderAudit,reports:renderReports,automation:renderAutomation,services:renderServices,settings:renderSettings};
+  const fn=pages[page];
+  if(fn)return fn();
+  return`<div class="adm-empty"><i class="ti ti-tools" style="font-size:32px;display:block;margin-bottom:8px"></i>${page.charAt(0).toUpperCase()+page.slice(1)} — coming soon</div>`;
+}
+
+function navigate(page){
+  currentPage=page;
+  document.querySelectorAll('.adm-nav-item').forEach(el=>{
+    el.classList.toggle('active',el.dataset.page===page);
+  });
+  document.getElementById('adm-content').innerHTML=renderPage(page);
+}
+
+window.navigate=navigate;
+window.setUF=function(f){userFilter=f;navigate('users')};
+window.toggleWorkflow=function(i,v){workflowStates[i]=v};
+window.connectService=function(i){if(!services[i].connected){services[i].connected=true;navigate('services')}};
+
+window.openResetModal=function(i){
+  selectedUser=users[i];
+  const overlay=document.createElement('div');
+  overlay.className='adm-modal-overlay';
+  overlay.id='modal-overlay';
+  overlay.innerHTML=`<div class="adm-modal">
+    <div class="adm-modal-title">Reset Password</div>
+    <div class="adm-modal-sub">${selectedUser.name} · ${selectedUser.upn}</div>
+    <div class="adm-form-label" style="margin-bottom:6px">New temporary password</div>
+    <input class="adm-input" type="password" id="new-pass" placeholder="Auto-generate or enter manually" style="margin-bottom:10px">
+    <label style="display:flex;align-items:center;gap:8px;font-size:12px;color:#94a3b8;margin-bottom:16px;cursor:pointer">
+      <input type="checkbox" checked id="force-change"> Force change at next sign-in
+    </label>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="closeModal();alert('Password reset sent via Graph API for '+selectedUser.upn)">Reset Password</button>
+    </div>
+  </div>`;
+  document.getElementById('adm-content').appendChild(overlay);
+};
+
+window.openLicModal=function(i){
+  selectedUser=users[i];
+  const overlay=document.createElement('div');
+  overlay.className='adm-modal-overlay';
+  overlay.id='modal-overlay';
+  overlay.innerHTML=`<div class="adm-modal">
+    <div class="adm-modal-title">Assign License</div>
+    <div class="adm-modal-sub">${selectedUser.name} · Current: ${selectedUser.lic}</div>
+    <div class="adm-form-label" style="margin-bottom:6px">Select license SKU</div>
+    <select class="adm-select" style="margin-bottom:16px">
+      <option>Microsoft 365 E1</option>
+      <option ${selectedUser.lic==='E3'?'selected':''}>Microsoft 365 E3</option>
+      <option ${selectedUser.lic==='E5'?'selected':''}>Microsoft 365 E5</option>
+      <option>Teams Essentials</option>
+      <option>Power BI Pro</option>
+    </select>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="closeModal();alert('License updated via Graph API for '+selectedUser.upn)">Assign License</button>
+    </div>
+  </div>`;
+  document.getElementById('adm-content').appendChild(overlay);
+};
+
+window.openNewUserModal=function(){
+  const overlay=document.createElement('div');
+  overlay.className='adm-modal-overlay';
+  overlay.id='modal-overlay';
+  overlay.innerHTML=`<div class="adm-modal">
+    <div class="adm-modal-title">Create New User</div>
+    <div class="adm-modal-sub">Provision via Microsoft Graph API</div>
+    <div class="adm-form-row"><div><div class="adm-form-label">FIRST NAME</div><input class="adm-input" placeholder="First name"></div><div><div class="adm-form-label">LAST NAME</div><input class="adm-input" placeholder="Last name"></div></div>
+    <div style="margin-bottom:10px"><div class="adm-form-label">UPN / EMAIL</div><input class="adm-input" placeholder="user@contoso.com"></div>
+    <div class="adm-form-row">
+      <div><div class="adm-form-label">DEPARTMENT</div><input class="adm-input" placeholder="Department"></div>
+      <div><div class="adm-form-label">LICENSE</div><select class="adm-select"><option>E1</option><option selected>E3</option><option>E5</option></select></div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px">
+      <button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="adm-btn adm-btn-primary adm-btn-sm" onclick="closeModal();alert('User created and welcome email sent!')">Create User</button>
+    </div>
+  </div>`;
+  document.getElementById('adm-content').appendChild(overlay);
+};
+
+window.showExportModal=function(){alert('Exporting user list as CSV...')};
+window.closeModal=function(){const m=document.getElementById('modal-overlay');if(m)m.remove()};
+
+document.getElementById('ms-login-btn').addEventListener('click',function(){
+  this.textContent='Redirecting to Microsoft...';
+  this.disabled=true;
+  setTimeout(()=>{
+    document.getElementById('adm-login-screen').style.display='none';
+    document.getElementById('adm-app').style.display='flex';
+    navigate('dashboard');
+  },900);
+});
+
+document.querySelectorAll('.adm-nav-item').forEach(item=>{
+  item.addEventListener('click',()=>navigate(item.dataset.page));
+});
+
+let notifOpen=false;
+document.getElementById('notif-btn').addEventListener('click',function(e){
+  notifOpen=!notifOpen;
+  const container=document.getElementById('notif-container');
+  if(notifOpen){
+    container.innerHTML=`<div class="adm-notif-panel">
+      <div style="padding:10px 14px;border-bottom:1px solid #1e3a5f;font-size:12px;font-weight:600;color:#cbd5e1">Notifications</div>
+      ${[
+        {t:'High-risk sign-in blocked',b:'frank@contoso.com · 2 min ago',c:'red'},
+        {t:'MFA policy: 168 accounts pending',b:'Enforcement deadline in 72h',c:'amber'},
+        {t:'3 devices pending compliance review',b:'Policy updated 1h ago',c:'blue'},
+        {t:'License utilization at 89%',b:'Consider purchasing more E5 seats',c:'gray'},
+      ].map(n=>`<div class="adm-notif-item">
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <div class="adm-dot ${n.c}" style="margin-top:4px;flex-shrink:0"></div>
+          <div><div class="adm-notif-title">${n.t}</div><div class="adm-notif-body">${n.b}</div></div>
+        </div>
+      </div>`).join('')}
+    </div>`;
+    setTimeout(()=>document.addEventListener('click',closeNotif),100);
+  } else {container.innerHTML=''}
+  function closeNotif(){container.innerHTML='';notifOpen=false;document.removeEventListener('click',closeNotif);}
+  e.stopPropagation();
+});
+})();
+</script>
